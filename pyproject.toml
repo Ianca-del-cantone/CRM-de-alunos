@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crm-de-alunos"
+version = "0.1.0"
+description = "CLI para gerenciamento de alunos."
+authors = [
+    { name="Seu Nome", email="seu@email.com" }
+]
+readme = "README.md"
+requires-python = ">=3.7"
