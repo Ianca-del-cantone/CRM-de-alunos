@@ -36,6 +36,10 @@ class Db:
     def listar_alunos(self):
         return list(self.alunos.values())
     
+    # Obtém um aluno pelo número de matrícula
+    def obter_aluno(self, matricula: int):
+        return self.alunos.get(matricula, None)
+    
 
     # Professor __________________________________________________________________
     # Adiciona um professor e gera a matrícula automaticamente

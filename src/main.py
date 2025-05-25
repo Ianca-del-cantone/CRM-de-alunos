@@ -1,4 +1,5 @@
 import cmd
+from src.Services.AlunoService import AlunoService
 from src.Infra.Db import Db  
 from src.Presentation.Cmd.Controller import Controller
 
@@ -6,10 +7,11 @@ class CRMDeAlunosShell(cmd.Cmd):
     intro = 'Bem-vindo ao CRM de Alunos. Digite help ou ? para listar os comandos.\n'
     prompt = '(crm) '
     db = Db()
+    aluno_service = AlunoService(db)
 
     def __init__(self):
         super().__init__()
-        self.controller = Controller(self.db)
+        self.controller = Controller(self.aluno_service)
         self._register_commands()
 
     def _register_commands(self):
