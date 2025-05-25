@@ -1,40 +1,44 @@
 import cmd
+from src.Infra.Db import Db  
+from src.Presentation.Cmd.Controller import Controller
 
 class CRMDeAlunosShell(cmd.Cmd):
     intro = 'Bem-vindo ao CRM de Alunos. Digite help ou ? para listar os comandos.\n'
     prompt = '(crm) '
-    alunos = []
+    db = Db()
 
-    def do_cadastrar(self, arg):
-        'Cadastrar um novo aluno: cadastrar <nome> <idade>'
-        partes = arg.split()
-        if len(partes) < 2:
-            print('Uso: cadastrar <nome> <idade>')
-            return
-        nome = partes[0]
-        try:
-            idade = int(partes[1])
-        except ValueError:
-            print('Idade deve ser um número inteiro.')
-            return
-        self.alunos.append({'nome': nome, 'idade': idade})
-        print(f'Aluno {nome} cadastrado com sucesso!')
+    def __init__(self):
+        super().__init__()
+        self.controller = Controller(self.db)
+        self._register_commands()
 
-    def do_listar(self, arg):
-        'Listar todos os alunos cadastrados'
-        if not self.alunos:
-            print('Nenhum aluno cadastrado.')
-            return
-        for idx, aluno in enumerate(self.alunos, 1):
-            print(f"{idx}. Nome: {aluno['nome']}, Idade: {aluno['idade']}")
+    def _register_commands(self):
+        for attr in dir(self.controller):
+            if attr.startswith('do_'):
+                method = getattr(self.controller, attr)
+                # Cria um wrapper que mantém a referência correta
+                def create_wrapper(method):
+                    def wrapper(_self, arg):
+                        return method(arg)
+                    wrapper.__doc__ = method.__doc__
+                    return wrapper
+                
+                setattr(self.__class__, attr, create_wrapper(method))
 
-    def do_sair(self, arg):
-        'Sair do programa'
-        print('Saindo...')
-        return True
+    def default(self, line):
+        print(f"Comando não reconhecido: {line}")
+        print("Digite 'help' para ver os comandos disponíveis.")
+
+    def emptyline(self):
+        pass  # Não faz nada quando uma linha vazia é digitada
 
 def main():
-    CRMDeAlunosShell().cmdloop()
+    try:
+        CRMDeAlunosShell().cmdloop()
+    except KeyboardInterrupt:
+        print("\nSaindo do CRM de Alunos...")
+    except Exception as e:
+        print(f"Erro inesperado: {e}")
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,4 @@
-from Enums.Disciplinas import Disciplina
+from src.Core.Enums.Disciplinas import Disciplina
 from typing import Dict, Optional
 
 

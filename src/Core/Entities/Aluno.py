@@ -1,7 +1,6 @@
-from Enums.Disciplinas import Disciplina
-from ValueObjects.Nota import HistoricoEscolar
+from src.Core.Enums.Disciplinas import Disciplina
+from src.Core.ValueObjects.HistoricoEscolar import HistoricoEscolar
 from typing import Optional
-import uuid
 
 class Aluno:
     """
@@ -12,7 +11,7 @@ class Aluno:
         Inicializa um novo aluno.
         """
         self.nome: str = nome
-        self.matricula: uuid.UUID = uuid.uuid4()
+        self.matricula: int
         self._historico: HistoricoEscolar = historico if historico else HistoricoEscolar()
 
     @property
